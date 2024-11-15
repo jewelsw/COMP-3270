@@ -1,6 +1,7 @@
 #Social Network Graphical Representation
 #Author: Jewels Wolter
 #Course: COMP 3270
+#Used Copilot in VSCode to help with code generation
 
 #Import necessary libraries
 import time
@@ -28,11 +29,85 @@ def createGraph(edges):
         graph[node2].append(node1)
     return graph
 
-#Implement BFS
+#Sort graph nodes in ascending order
+def sortGraph(graph):
+    sortedGraph = {}
+    for node in sorted(graph):
+        sortedGraph[node] = graph[node]
+    return sortedGraph
+
+#Implement BFS (Breadth First Search) algorithm 
+#Output - Distance for each node from node 1 to 24 and time taken 
+def BFS(graph, start):
+    #Define local variables
+    visited = []
+    queue = []
+    times = {}
+    distances = {}
+
+    #Initialize the queue
+    queue.append(start)
+    visited.append(start)
+    distances[start] = 0
+    
+    #Start the timer
+    start_time = time.time()
+    times[start] = 0
+    
+    #Iterate through the graph
+    while queue:
+        node = queue.pop(0)
+        for neighbour in graph[node]:
+            if neighbour not in visited:
+                visited.append(neighbour)
+                queue.append(neighbour)
+                distances[neighbour] = distances[node] + 1
+                times[neighbour] = time.time() - start_time 
+                      
+    return distances, times
 
 #Implement DFS
+def DFS(graph, start):
+    #Define local variables
+    visited = []
+    stack = []
+    times = {}
+    distances = {}
+
+    #Initialize the stack
+    stack.append(start)
+    visited.append(start)
+    distances[start] = 0
+    
+    #Start the timer
+    start_time = time.time()
+    times[start] = 0
+    
+    #Iterate through the graph
+    while stack:
+        node = stack.pop()
+        for neighbour in graph[node]:
+            if neighbour not in visited:
+                visited.append(neighbour)
+                stack.append(neighbour)
+                distances[neighbour] = distances[node] + 1
+                times[neighbour] = time.time() - start_time 
+                      
+    return distances, times
 
 #Generate a report for distance and time taken for BFS and DFS
  
 #Main function
-print(createGraph(getEdges('Test_Case_Assignment2.txt')))
+edges = getEdges('Test_Case_Assignment2.txt')
+graph = createGraph(edges)
+sortedGraph = sortGraph(graph)
+
+print('BFS Report')
+BFSDistances, BFSTime = BFS(sortedGraph, 'N_0')
+for node, distance in BFSDistances.items():
+    print(f'{node} - {distance} nodes at {BFSTime[node]} seconds from N_0')
+
+print('\nDFS Report')
+DFSDistances, DFSTime = DFS(sortedGraph, 'N_0')
+for node, distance in DFSDistances.items():
+    print(f'{node} - {distance} nodes at {DFSTime[node]} seconds from N_0')
