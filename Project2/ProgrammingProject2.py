@@ -29,13 +29,6 @@ def createGraph(edges):
         graph[node2].append(node1)
     return graph
 
-#Sort graph nodes in ascending order
-def sortGraph(graph):
-    sortedGraph = {}
-    for node in sorted(graph):
-        sortedGraph[node] = graph[node]
-    return sortedGraph
-
 #Implement BFS (Breadth First Search) algorithm 
 #Output - Distance for each node from node 1 to 24 and time taken 
 def BFS(graph, start):
@@ -61,8 +54,8 @@ def BFS(graph, start):
             if neighbour not in visited:
                 visited.append(neighbour)
                 queue.append(neighbour)
-                distances[neighbour] = distances[node] + 1
-                times[neighbour] = time.time() - start_time 
+                distances[neighbour] = len(visited)
+                times[neighbour] = (time.time() - start_time) * 1000
                       
     return distances, times
 
@@ -90,8 +83,8 @@ def DFS(graph, start):
             if neighbour not in visited:
                 visited.append(neighbour)
                 stack.append(neighbour)
-                distances[neighbour] = distances[node] + 1
-                times[neighbour] = time.time() - start_time 
+                distances[neighbour] = len(visited)
+                times[neighbour] = (time.time() - start_time) * 1000 
                       
     return distances, times
 
@@ -100,14 +93,13 @@ def DFS(graph, start):
 #Main function
 edges = getEdges('Test_Case_Assignment2.txt')
 graph = createGraph(edges)
-sortedGraph = sortGraph(graph)
 
 print('BFS Report')
-BFSDistances, BFSTime = BFS(sortedGraph, 'N_0')
+BFSDistances, BFSTime = BFS(graph, 'N_0')
 for node, distance in BFSDistances.items():
-    print(f'{node} - {distance} nodes at {BFSTime[node]} seconds from N_0')
+    print(f'{node} - {distance} nodes visited in {BFSTime[node]} ms from N_0')
 
 print('\nDFS Report')
-DFSDistances, DFSTime = DFS(sortedGraph, 'N_0')
+DFSDistances, DFSTime = DFS(graph, 'N_0')
 for node, distance in DFSDistances.items():
-    print(f'{node} - {distance} nodes at {DFSTime[node]} seconds from N_0')
+    print(f'{node} - {distance} nodes visitied in {DFSTime[node]} ms from N_0')
